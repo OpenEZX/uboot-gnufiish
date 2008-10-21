@@ -1207,5 +1207,7 @@ typedef struct {
 #endif
 
 int __board_nand_init(struct nand_chip *nand);
+int s3c24xx_nand_init(struct nand_chip *nand, u_int8_t tacls,
+		      u_int8_t twrph0, u_int8_t twrph1);
 
 #endif /*__S3C24X0_H__*/

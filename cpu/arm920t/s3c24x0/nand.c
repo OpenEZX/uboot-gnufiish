@@ -213,12 +213,10 @@ static int s3c2410_nand_correct_data(struct mtd_info *mtd, u_char *dat,
 }
 #endif
 
-int board_nand_init(void) __attribute__((weak, alias("__board_nand_init")));
-
-int __board_nand_init(struct nand_chip *nand)
+int s3c24xx_nand_init(struct nand_chip *nand, u_int8_t tacls,
+		      u_int8_t twrph0, u_int8_t twrph1)
 {
 	u_int32_t cfg;
-	u_int8_t tacls, twrph0, twrph1;
 	S3C24X0_CLOCK_POWER * const clk_power = S3C24X0_GetBase_CLOCK_POWER();
 
 	DEBUGN("board_nand_init()\n");
@@ -226,18 +224,15 @@ int __board_nand_init(struct nand_chip *nand)
 	clk_power->CLKCON |= (1 << 4);
 
 	/* initialize hardware */
-	twrph0 = 3; twrph1 = 0; tacls = 0;
-
 #if defined(CONFIG_S3C2410)
 	cfg = S3C2410_NFCONF_EN;
-	cfg |= S3C2410_NFCONF_TACLS(tacls - 1);
+	cfg |= S3C2410_NFCONF_TACLS(tacls);
 	cfg |= S3C2410_NFCONF_TWRPH0(twrph0 - 1);
 	cfg |= S3C2410_NFCONF_TWRPH1(twrph1 - 1);
 
 	NFCONF = cfg;
 #elif defined(CONFIG_S3C2440) || defined(CONFIG_S3C2442)
-	twrph0 = 7; twrph1 = 7; tacls = 7;
-	NFCONF = (tacls<<12)|(twrph0<<8)|(twrph1<<4)|(0<<0);
+	NFCONF = (tacls<<12)|((twrph0-1)<<8)|((twrph1-1)<<4)|(0<<0);
 	NFCONT = (0<<13)|(0<<12)|(0<<10)|(0<<9)|(0<<8)|(1<<6)|(1<<5)|(1<<4)|(1<<1)|(1<<0);
 #endif
 
@@ -287,6 +282,26 @@ int __board_nand_init(struct nand_chip *nand)
 
 	return 0;
 }
+
+int board_nand_init(void) __attribute__((weak, alias("__board_nand_init")));
+
+/* This is the default initialization function in case the board
+ * doesn't provide a board-specific board_nand_init function */
+int __board_nand_init(struct nand_chip *nand)
+{
+	u_int8_t tacls, twrph0, twrph1;
+	
+	/* use the most conservative timings possible */
+	twrph0 = 8; twrph1 = 8;
+#if defined(CONFIG_S3C2410)
+	tacls = 7; 
+#elif defined(CONFIG_S3C2440) || defined(CONFIG_S3C2442)
+	tacls = 3;
+#endif
+
+	return s3c24xx_nand_init(nand, tacls, twrph0, twrph1);
+}
+
 
 #else
  #error "U-Boot legacy NAND support not available for S3C24xx"
