@@ -34,6 +34,7 @@
 #include <s3c2440.h>
 #include <i2c.h>
 #include <bootmenu.h>
+#include <nand.h>
 #include <asm/atomic.h>
 
 #include "../common/neo1973.h"
@@ -863,4 +864,16 @@ int gta02_get_pcb_revision(void)
 	gpio->GPDDAT |= (1 << 0) | (1 << 3) | (1 << 4);
 
 	return n;
+}
+
+/* at 100MHz HCLK, this is 0ns, 30ns and 20ns */
+#define GTA02_NAND_TACLS	0
+#define GTA02_NAND_TWRPH0	3
+#define GTA02_NAND_TWRPH1	2
+
+int board_nand_init(struct nand_chip *nand)
+{
+	return s3c24xx_nand_init(nand, GTA02_NAND_TACLS,
+				 GTA02_NAND_TWRPH0,
+				 GTA02_NAND_TWRPH1);
 }
