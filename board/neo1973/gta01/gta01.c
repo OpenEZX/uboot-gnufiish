@@ -563,10 +563,10 @@ char *dynpart_names[] = {
     "u-boot", "u-boot_env", "kernel", "splash", "rootfs", NULL };
 
 
-/* at 133MHz HCLK, this is 0ns, 30ns and 30ns */
-#define GTA02_NAND_TACLS	0
-#define GTA02_NAND_TWRPH0	4
-#define GTA02_NAND_TWRPH1	4
+/* at 133MHz HCLK, this is 15ns, 30ns and 30ns */
+#define GTA01_NAND_TACLS	2
+#define GTA01_NAND_TWRPH0	4
+#define GTA01_NAND_TWRPH1	4
 
 int board_nand_init(struct nand_chip *nand)
 {
