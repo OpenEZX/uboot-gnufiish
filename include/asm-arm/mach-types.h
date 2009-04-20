@@ -1595,6 +1595,7 @@ extern unsigned int __machine_arch_type;
 #define MACH_TYPE_P300                 1602
 #define MACH_TYPE_XDACOMET             1603
 #define MACH_TYPE_DEXFLEX2             1604
+#define MACH_TYPE_GLOFIISH_X800        1772
 
 #ifdef CONFIG_ARCH_EBSA110
 # ifdef machine_arch_type

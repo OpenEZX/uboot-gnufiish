@@ -2431,6 +2431,10 @@ omap730p2_cs3boot_config :	unconfig
 sbc2410x_config: unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm920t sbc2410x NULL s3c24x0
 
+glofiish_x800_config \
+glofiish_m800_config: unconfig
+	@$(MKCONFIG) $(@:_config=) arm arm920t glofiish NULL s3c24x0
+
 gta02_config \
 gta02v1_config \
 gta02v2_config \
