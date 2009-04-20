@@ -146,7 +146,7 @@ void *video_hw_init (void)
 	lcd->LCDSADDR3 = pGD->winSizeX;
 
 	/* Clear video memory */
-	memset(pGD->frameAdrs, 0, pGD->memSize);
+	//memset(pGD->frameAdrs, 0, pGD->memSize);
 
 	/* Enable  Display  */
 	lcd->LCDCON1 |= 0x01;	/* ENVID = 1 */
